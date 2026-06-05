@@ -56,7 +56,6 @@ This project applies a rule based remediation framework to improve data quality 
 
 * SQL Server
 * T-SQL
-* GitHub
 * AI-Assisted Development Workflow
 
 ---
@@ -239,28 +238,44 @@ No raw operational records were used for automated analysis.
 ## Repository Structure
 
 ```text
-NYC311-DataQualityFramework/
-
-├── Data/
-│   ├── Raw/
-│   ├── Cleaned/
+NYC_311_Service_Requests_Data_Quality_Framework
+├── 01_Data/
+│   ├── 01_NYC_Service_Requests_Raw.csv
+│   └── 02_NYC_Service_Requests_Cleaned.csv
 │
-├── SQL/
-│   ├── Profiling/
-│   ├── Cleaning/
-│   ├── Validation/
+├── 02_Data_Profile/
+│   ├── 01_Data_Profile_Raw.pdf
+│   └── 02_Data_Profile_Cleaned.pdf
 │
-├── PowerBI/
+├── 03_Rule_Book/
+│   ├── 01_Data_Quality_Rulebook.pdf
+│   └── 02_Data_Dictionary.pdf
+|
+├── 04_Mapping_Table/
+│   ├── 01_Mapping_Table_Column_city.pdf
+│   ├── 02_Mapping_Table_Column_borough.pdf
+│   └── 03_Mapping_Table_Column_complaint_type.pdf
+|
+├── 05_SQL_Scripts/
+│   ├── 01_Create_Project_Database.sql
+│   ├── 02_Create_Medallion_Architecture_Schema.sql
+│   ├── 03_Create_Bronze_Layer_Raw_Data_Table.sql
+│   ├── 04_Raw_Data_Profiling.sql
+│   ├── 05_Create_Silver_Layer_Data_Table.sql
+│   ├── 06_Clean_Silver_Layer_Data.sql
+│   ├── 07_Create_Gold_Layer_Production Table.sql
+│   ├── 08_Load_Cleaned_Silver_Layer_Data_to_Gold_Layer.sql
+│   └── 09_Cleaned_Data_Profiling.sql
 │
-├── Documentation/
-│   ├── Data_Profile_Raw.pdf
-│   ├── Data_Profile_Clean.pdf
-│   ├── Rulebook.pdf
-│   ├── Final_Report.pdf
-│
-├── README.md
-│
-└── Screenshots/
+├── 06_Data_Quality_Reports/
+│   ├── 01_Rule_Validation_Report.pdf
+│   ├── 02_Cleaning_Impact_Analysis.pdf
+│   ├── 03_AI_Augmentation_Report.pdf
+│   ├── 04_Cleaning_Methodology_Report.pdf
+│   ├── 05_Data_Quality_Scorecard.pdf
+│   └── 06_Executive_Summary_and_Report.pdf
+|
+└──  README.md
 ```
 
 ---
@@ -274,4 +289,14 @@ NYC311-DataQualityFramework/
 * AI can accelerate development while maintaining human oversight.
 
 ---
+
+```text
+SELECT TOP 20 * FROM bronze.NYC_Service_Requests_raw;
+```
+<img width="1711" height="653" alt="raw" src="https://github.com/user-attachments/assets/f4aad4ae-3aa5-4f93-9647-fce9b503afa8" />
+
+```text
+SELECT TOP 20 * FROM gold.NYC_Service_Requests;
+```
+<img width="1693" height="656" alt="cleaned" src="https://github.com/user-attachments/assets/0e8bf7d1-382a-4346-85c4-2207b3bd2710" />
 
