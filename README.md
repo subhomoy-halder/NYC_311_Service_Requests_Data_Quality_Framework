@@ -306,6 +306,8 @@ SELECT TOP 10 * FROM bronze.NYC_Service_Requests_raw;   -- Sample of Raw data
 | 69188466 | 06-01-2026 01:50 | NULL | NYPD | Blocked Driveway | 11373 | ELMHURST | In Progress | NULL | QUEENS | 40.74473932 | -73.87237213 |
 | 69185619 | 06-01-2026 01:50 | NULL | NYPD | Abandoned Vehicle | 11239 | BROOKLYN | In Progress | NULL | BROOKLYN | 40.65651338 | -73.86918550 |
 
+---
+
 ```text
 SELECT TOP 10 * FROM gold.NYC_Service_Requests;   -- Sample of Cleaned Data
 ```
