@@ -291,12 +291,35 @@ NYC_311_Service_Requests_Data_Quality_Framework
 ---
 
 ```text
-SELECT TOP 20 * FROM bronze.NYC_Service_Requests_raw;
+SELECT TOP 10 * FROM bronze.NYC_Service_Requests_raw;   -- Sample of Raw data
 ```
-<img width="1711" height="653" alt="raw" src="https://github.com/user-attachments/assets/f4aad4ae-3aa5-4f93-9647-fce9b503afa8" />
+| unique_key | created_date | closed_date | agency | complaint_type | incident_zip | city | status | due_date | borough | latitude | longitude |
+|------------|-------------|-------------|--------|----------------|-------------|------|--------|----------|----------|-----------|------------|
+| 69189778 | 06-01-2026 02:57 | NULL | DOT | Street Condition | NULL | NULL | Open | NULL | Unspecified | NULL | NULL |
+| 69189780 | 06-01-2026 02:25 | NULL | DOT | Street Condition | 11416 | QUEENS | Open | NULL | QUEENS | NULL | NULL |
+| 69192559 | 06-01-2026 02:21 | NULL | DOT | Street Condition | 11422 | QUEENS | Open | NULL | QUEENS | 40.65470936 | -73.74330808 |
+| 69185044 | 06-01-2026 02:21 | 06-01-2026 02:21 | DOT | Street Condition | 11422 | QUEENS | Closed | NULL | QUEENS | 40.65470936 | -73.74330808 |
+| 69194179 | 06-01-2026 01:51 | NULL | NYPD | Noise - Residential | NULL | NULL | In Progress | NULL | Unspecified | 40.85452034 | -73.89414328 |
+| 69187231 | 06-01-2026 01:51 | NULL | NYPD | Noise - Street/Sidewalk | 10457 | NULL | In Progress | NULL | BRONX | 40.83826484 | -73.90522783 |
+| 69191414 | 06-01-2026 01:51 | NULL | NYPD | Noise - Street/Sidewalk | 10458 | BRONX | In Progress | NULL | BRONX | 40.86089245 | -73.89595880 |
+| 69192772 | 06-01-2026 01:51 | NULL | NYPD | Noise - Residential | 10458 | BRONX | In Progress | NULL | BRONX | 40.86423853 | -73.89327458 |
+| 69188466 | 06-01-2026 01:50 | NULL | NYPD | Blocked Driveway | 11373 | ELMHURST | In Progress | NULL | QUEENS | 40.74473932 | -73.87237213 |
+| 69185619 | 06-01-2026 01:50 | NULL | NYPD | Abandoned Vehicle | 11239 | BROOKLYN | In Progress | NULL | BROOKLYN | 40.65651338 | -73.86918550 |
 
 ```text
-SELECT TOP 20 * FROM gold.NYC_Service_Requests;
+SELECT TOP 10 * FROM gold.NYC_Service_Requests;   -- Sample of Cleaned Data
 ```
-<img width="1693" height="656" alt="cleaned" src="https://github.com/user-attachments/assets/0e8bf7d1-382a-4346-85c4-2207b3bd2710" />
+| unique_key | created_date | closed_date | agency | complaint_type | incident_zip | city | status | borough | latitude | longitude |
+|------------|-------------|-------------|--------|----------------|-------------|------|--------|----------|-----------|------------|
+| 42282670 | 31-10-2025 09:28 | 31-10-2025 09:28 | DOB | Construction Safety Enforcement | 10014 | New York City | Closed | Manhattan | 40.73252159 | -74.00649839 |
+| 42282671 | 31-10-2025 09:20 | 31-10-2025 09:20 | DOB | Construction Safety Enforcement | 10014 | New York City | Closed | Manhattan | 40.73216494 | -74.00207110 |
+| 42282673 | 31-10-2025 14:28 | 31-10-2025 14:28 | DOB | Construction Safety Enforcement | 11238 | Brooklyn | Closed | Brooklyn | 40.68617685 | -73.95753922 |
+| 42282675 | 31-10-2025 14:55 | 31-10-2025 14:55 | DOB | Construction Safety Enforcement | 11101 | Long Island City | Closed | Queens | 40.74322808 | -73.95394459 |
+| 42282683 | 31-10-2025 12:00 | 31-10-2025 12:00 | DOB | Construction Safety Enforcement | 11238 | Brooklyn | Closed | Brooklyn | 40.67708752 | -73.97066799 |
+| 42282684 | 31-10-2025 10:29 | 31-10-2025 10:29 | DOB | Construction Safety Enforcement | 11211 | Brooklyn | Closed | Brooklyn | 40.70579246 | -73.96179353 |
+| 42282685 | 31-10-2025 08:25 | 31-10-2025 08:25 | DOB | Construction Safety Enforcement | 11208 | Brooklyn | Closed | Brooklyn | 40.67390480 | -73.88234224 |
+| 42282686 | 31-10-2025 15:08 | 31-10-2025 15:08 | DOB | Construction Safety Enforcement | 11105 | Astoria | Closed | Queens | 40.78663278 | -73.91436530 |
+| 42282689 | 31-10-2025 13:22 | 31-10-2025 13:22 | DOB | Construction Safety Enforcement | 10027 | New York City | Closed | Manhattan | 40.81058117 | -73.95391605 |
+| 42282690 | 31-10-2025 17:59 | 31-10-2025 17:59 | DOB | Construction Safety Enforcement | 11232 | Brooklyn | Closed | Brooklyn | 40.64620696 | -73.99705590 |
+---
 
