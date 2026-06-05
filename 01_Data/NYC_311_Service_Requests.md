@@ -7,7 +7,7 @@ Due to the size of the dataset (5.3M+ records), the raw and cleaned data files a
 The original ingested dataset used for profiling and data quality assessment can be accessed here:
 
 🔗 **Raw Dataset:**
-[Download Raw Dataset](https://drive.google.com/file/d/1elio8SMuCYqQKLe7RJKCgawY7buB7j8_/view?usp=sharing)
+[Download Raw Dataset](https://drive.google.com/drive/folders/1e0lIgGUC-4nSD5lQR1dvzOOgeDe4IjER?usp=sharing)
 
 ---
 
@@ -16,7 +16,7 @@ The original ingested dataset used for profiling and data quality assessment can
 The cleaned dataset produced after rule-based remediation, standardization, validation, and exception handling can be accessed here:
 
 🔗 **Cleaned Dataset:**
-[Download Cleaned Dataset](https://drive.google.com/file/d/1XZjyA7a0HLXz1VWhmB_6jQ8Jo_NNfDH2/view?usp=sharing)
+[Download Cleaned Dataset](https://drive.google.com/drive/folders/1e0lIgGUC-4nSD5lQR1dvzOOgeDe4IjER?usp=sharing)
 
 ---
 
