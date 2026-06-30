@@ -1,4 +1,4 @@
-# Enterprise Data Quality Assessment & Remediation for NYC 311 Service Requests
+# Data Quality Assessment & Remediation for NYC 311 Service Requests
 
 ## Overview
 
