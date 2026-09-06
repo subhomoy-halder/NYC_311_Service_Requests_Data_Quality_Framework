@@ -1,116 +1,98 @@
-# Enterprise Data Quality Assessment & Remediation for NYC 311 Service Requests
+# Enterprise Data Quality Assessment and Remediation for NYC 311 Service Requests
 
-### SQL-Driven Data Cleaning & Quality Engineering Project with Responsible AI Augmentation
+### SQL Driven Data Cleaning and Quality Engineering Project with Responsible AI Augmentation
 
-> **A production-style SQL Server data-quality pipeline that profiles,
-> validates, remediates, standardizes, and audits 5.3M+ NYC 311
-> service-request records before analytical consumption.**
+> **A production style SQL Server data quality pipeline that profiles, validates, remediates, standardizes and audits over 5.3 million NYC 311 service request records before analytical consumption.**
 
 ------------------------------------------------------------------------
 
 ## Executive Summary
 
-Operational datasets are rarely analysis-ready when they arrive.
+Operational datasets are rarely analysis ready when they arrive.
 
-This project demonstrates how a large operational dataset can be
-transformed into a structured, validated analytical dataset using a
-**rule-driven data quality framework** rather than ad-hoc cleaning.
+This project demonstrates how a large operational dataset can be transformed into a structured, validated analytical dataset using a **rule driven data quality framework** rather than adhoc cleaning.
 
-Using the **NYC 311 Service Requests** dataset, I designed and
-implemented an end-to-end data quality workflow in **Microsoft SQL
-Server** covering:
+Using the **NYC 311 Service Requests** dataset, I designed and implemented an end to end data quality workflow in **Microsoft SQL Server** covering:
 
--   Raw data ingestion
--   Bronze / Silver / Gold data architecture
--   Data profiling
--   NULL and completeness analysis
--   Duplicate detection
--   Cardinality analysis
--   Temporal validation
--   Geographic validation
--   Categorical consistency analysis
--   Formal Data Quality Rulebook
--   Rule-based remediation
--   Reference-data standardization
--   Exception management
--   Data-type enforcement
--   Post-clean validation
--   Data quality scorecard
--   Cleaning impact analysis
--   Responsible AI-assisted development
+1.   Raw data ingestion
+2.   Medallion data architecture
+3.   Data profiling
+4.   NULL and completeness analysis
+5.   Duplicate detection
+6.   Cardinality analysis
+7.   Temporal validation
+8.   Geographic validation
+9.   Categorical consistency analysis
+10.   Formal Data Quality Rulebook
+11.   Rule based remediation
+12.   Reference data standardization
+13.   Exception management
+14.   Data type enforcement
+15.   Post clean validation
+16.   Data quality scorecard
+17.   Cleaning impact analysis
+18.   Responsible AI assisted development
 
-The result was a cleaned analytical dataset containing **5,206,784
-records across 11 production columns**, compared with **5,314,955 raw
-records across 12 columns**.
+The result was a cleaned analytical dataset containing **5,206,784 records across 11 production columns**, compared with **5,314,955 raw records across 12 columns**.
 
 ------------------------------------------------------------------------
 
 # 1. Project at a Glance
 
-  -----------------------------------------------------------------------
-  Area                                Details
-  ----------------------------------- -----------------------------------
-  **Project Type**                    Data Quality Engineering / SQL Data
-                                      Cleaning
+```text
+Project Type:                     Data Quality Engineering / SQL Data Cleaning
 
-  **Dataset**                         NYC 311 Service Requests
+Dataset:                          NYC 311 Service Requests
 
-  **Source**                          NYC Open Data
+Source:                           NYC Open Data
 
-  **Raw Records**                     5,314,955
+Raw Records:                      5,314,955
 
-  **Clean Records**                   5,206,784
+Clean Records:                    5,206,784
 
-  **Records Removed / Quarantined**   108,171
+Records Removed / Quarantined:    108,171
 
-  **Raw Columns**                     12
+Raw Columns:                      12
 
-  **Production Columns**              11
+Production Columns:               11
 
-  **Database**                        Microsoft SQL Server
+Database:                         Microsoft SQL Server
 
-  **Architecture**                    Bronze → Silver → Gold
+Architecture:                     Medallion Architecture (Bronze → Silver → Gold)
 
-  **Primary Language**                T-SQL
+Primary Language:                 T-SQL
 
-  **Validation Framework**            Rule-based Data Quality Rulebook
+Validation Framework:             Rule based Data Quality Rulebook
 
-  **Quality Dimensions**              Completeness, Uniqueness, Validity,
-                                      Timeliness
+Quality Dimensions:               Completeness, Uniqueness, Validity, Timeliness
 
-  **AI Usage**                        Development assistance with
-                                      analyst-controlled validation
-  -----------------------------------------------------------------------
+AI Usage:                         Development assistance with analyst controlled validation
 
-**Dataset coverage:** 2025-01-01 to 2026-06-01.
+Dataset coverage:                 2025-01-01 to 2026-06-01.
+```
 
 ------------------------------------------------------------------------
 
 # 2. Business Problem
 
-NYC 311 is a large operational service-request system containing
-information about citizen complaints, responsible agencies, request
-status, timestamps, locations, and complaint classifications.
+NYC 311 is a large operational service request system containing information about citizen complaints, responsible agencies, request status, timestamps, locations, and complaint classifications.
 
-At this scale, data-quality problems can affect:
+At this scale, data quality problems can affect:
 
--   Operational reporting
--   Service-request volumes
--   Geographic analysis
--   Complaint categorization
--   Resolution-time analysis
--   Agency performance reporting
--   Downstream dashboards
--   Analytical models
+1.   Operational reporting
+2.   Service request volumes
+3.   Geographic analysis
+4.   Complaint categorization
+5.   Resolution time analysis
+6.   Agency performance reporting
+7.   Downstream dashboards
+8.   Analytical models
 
-The project therefore treats data quality as a **formal engineering
-problem**, not simply as a preprocessing step.
+The project therefore treats data quality as a **formal engineering problem** and not as a preprocessing step.
 
 ### Core question
 
-> **How can a large operational dataset be systematically assessed,
-> remediated, validated, and made trustworthy for analytical consumption
-> while preserving traceability of the changes made?**
+> **How can a large operational dataset be systematically assessed, remediated, validated, and made trustworthy for analytical consumption while preserving traceability of the changes made?**
 
 ------------------------------------------------------------------------
 
@@ -120,13 +102,11 @@ The project was designed around seven objectives:
 
 1.  Assess the quality of the raw dataset through systematic profiling.
 2.  Identify quality problems across multiple dimensions.
-3.  Translate identified issues into explicit business and technical
-    rules.
+3.  Translate identified issues into explicit business and technical rules.
 4.  Remediate data using reproducible SQL logic.
 5.  Preserve traceability of records removed or modified.
-6.  Re-profile and revalidate the cleaned dataset.
-7.  Demonstrate responsible use of AI as a development accelerator
-    rather than as an autonomous decision-maker.
+6.  Re profile and revalidate the cleaned dataset.
+7.  Demonstrate responsible use of AI as a development accelerator rather than as an autonomous decision maker.
 
 The overall workflow is:
 
@@ -154,7 +134,7 @@ Reporting
 
 # 4. Project Architecture
 
-The database follows a **Medallion-style architecture**.
+The database follows the **Medallion Architecture**.
 
 ``` text
                          ┌───────────────────────┐
@@ -167,7 +147,7 @@ The database follows a **Medallion-style architecture**.
                     │          BRONZE            │
                     │                            │
                     │ Raw ingestion              │
-                    │ VARCHAR-based source data  │
+                    │ VARCHAR based source data  │
                     └─────────────┬──────────────┘
                                   │
                                   ▼
@@ -196,21 +176,21 @@ The database follows a **Medallion-style architecture**.
                     │          SILVER            │
                     │                            │
                     │ Duplicate removal          │
-                    │ Date validation             │
+                    │ Date validation            │
                     │ Status reconciliation      │
                     │ Geographic validation      │
-                    │ Standardization             │
-                    │ ZIP validation              │
+                    │ Standardization            │
+                    │ ZIP validation             │
                     │ Datatype enforcement       │
                     └─────────────┬──────────────┘
                                   │
                        ┌──────────┴──────────┐
                        ▼                     ▼
              ┌──────────────────┐  ┌──────────────────┐
-             │ EXCEPTION TABLE  │  │ POST-CLEAN       │
+             │ EXCEPTION TABLE  │  │ POST CLEAN       │
              │                  │  │ VALIDATION       │
              │ unique_key       │  │                  │
-             │ exception reason │  │ Rule re-testing  │
+             │ exception reason │  │ Rule retesting  │
              │ timestamp        │  │ Profiling        │
              └──────────────────┘  └────────┬─────────┘
                                              │
@@ -218,7 +198,7 @@ The database follows a **Medallion-style architecture**.
                               ┌────────────────────────┐
                               │          GOLD          │
                               │                        │
-                              │ Production Analytical  │
+                              │ Production Ready       │
                               │ Dataset                │
                               └────────────┬───────────┘
                                            │
@@ -233,25 +213,16 @@ The database follows a **Medallion-style architecture**.
                               └────────────────────────┘
 ```
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Suggested filename: architecture.png
-
-Insert an exported/high-resolution image of the architecture above here:
-![Project Architecture](docs/images/architecture.png)
--->
-```
+<img width="1312" height="502" alt="Medallion architecture" src="https://github.com/user-attachments/assets/43801339-3564-4394-9857-d8a883503276" />
+Image Source: dataforgelabs.com
 
 ------------------------------------------------------------------------
 
-# 5. Bronze Layer --- Raw Data Ingestion
+# 5. Bronze Layer - Raw Data Ingestion
 
-The Bronze layer preserves the source data in an ingestion-oriented
-structure.
+The Bronze layer preserves the source data in an ingestion oriented structure.
 
-All source columns initially enter as `VARCHAR`, allowing the raw
-ingestion layer to accept the source file before analytical datatype
-enforcement.
+All source columns initially enter as `VARCHAR`, allowing the raw ingestion layer to accept the source file before analytical datatype enforcement.
 
 ### Raw table
 
@@ -259,6 +230,7 @@ enforcement.
 bronze.NYC_Service_Requests_raw
 ```
 
+```text
 ### Raw schema
 
   Column           Raw Type
@@ -275,8 +247,9 @@ bronze.NYC_Service_Requests_raw
   borough          VARCHAR(30)
   latitude         VARCHAR(30)
   longitude        VARCHAR(30)
+```
 
-The raw data was loaded using SQL Server `BULK INSERT`.
+The raw data was loaded using SQL Server using `BULK INSERT`.
 
 ### Ingestion considerations
 
@@ -287,26 +260,20 @@ The ingestion process required handling:
 -   Field termination
 -   Row termination
 -   Raw datatype sizing
--   Large-volume loading
+-   Large volume loading
 
-AI assisted with troubleshooting issues including row terminators,
-insufficient `VARCHAR` lengths, and bulk-load failures. Implementation
-and validation remained analyst-controlled.
+AI assisted with troubleshooting issues including row terminators, insufficient `VARCHAR` lengths and bulk load failures. Implementation and validation remained analyst controlled.
 
 ------------------------------------------------------------------------
 
 # 6. Initial Data Profiling
 
-Profiling was performed **before transformation** so remediation
-decisions were based on observed data-quality problems rather than
-assumptions.
-
-The profiling framework assessed:
+Profiling was performed **before transformation** so remediation decisions were based on observed data quality problems rather than assumptions. The profiling framework assessed:
 
 ### Completeness
 
 -   NULL counts
--   Missing-value percentages
+-   Missing value percentages
 -   Important vs optional attributes
 
 ### Uniqueness
@@ -321,20 +288,20 @@ The profiling framework assessed:
 -   ZIP code validity
 -   Latitude bounds
 -   Longitude bounds
--   Coordinate-pair completeness
+-   Coordinate pair completeness
 
 ### Consistency
 
 -   City variations
 -   Borough variations
--   Complaint-type variations
+-   Complaint type variations
 -   Status values
 -   Agency values
 
 ### Timeliness
 
 -   Future dates
--   Service-request lifecycle sequence validity
+-   Service request lifecycle sequence validity
 
 ------------------------------------------------------------------------
 
@@ -344,8 +311,7 @@ The raw dataset contained:
 
 -   **5,314,955 records**
 -   **12 columns**
--   **100,984 exact duplicate rows** when `unique_key` was excluded from
-    the duplicate comparison
+-   **100,984 exact duplicate rows** when `unique_key` was excluded from the duplicate comparison
 -   **1.90% duplicate rate** under that comparison
 -   **183,739 NULL `closed_date` values**
 -   **45,981 NULL `incident_zip` values**
@@ -354,36 +320,33 @@ The raw dataset contained:
 -   **96,369 NULL `longitude` values**
 -   **5,293,055 NULL `due_date` values**
 -   **240 city values**
--   **194 complaint-type values**
--   **383 ZIP-code values**
+-   **194 complaint type values**
+-   **383 ZIP code values**
 -   **7 status values**
 -   **16 agency values**
 
-The important finding is that the raw dataset contained more than
-formatting inconsistencies. It contained structural problems involving
-duplication, temporal integrity, workflow-status consistency, geographic
-completeness, and reference-value standardization.
+The findings show that the raw dataset contained more than formatting inconsistencies. It contained structural problems involving duplication, temporal integrity, workflow status inconsistency, geographic
+incompleteness, and non standardized reference values.
 
 ------------------------------------------------------------------------
 
 # 8. Data Quality Rulebook
 
-Instead of writing isolated cleaning queries, the project formalized
-expected data behavior into a **Data Quality Rulebook**.
+Instead of writing isolated cleaning queries, the project formalized expected data behavior into a **Data Quality Rulebook**.
 
 Rules were classified as:
-
--   **Critical** --- integrity, identification, and core
-    business-process issues
--   **High** --- analytical, geographic, and operational issues
--   **Medium** --- consistency and standardization issues
--   **Low** --- presentation/reporting issues
-
+```text
+-   Critical        integrity, identification and core business process issues
+-   High            analytical, geographic and operational issues
+-   Medium          consistency and standardization issues
+-   Low             presentation/reporting issues
+```
+---
 ## Rule Catalogue
-
+```text
   Rule     Description                                 Severity
   -------- ------------------------------------------- ----------
-  DQ-001   Unique service-request identifier           Critical
+  DQ-001   Unique service request identifier           Critical
   DQ-002   Created date mandatory                      Critical
   DQ-003   Valid datetime format                       Critical
   DQ-004   Closed date ≥ created date                  Critical
@@ -393,35 +356,18 @@ Rules were classified as:
   DQ-008   Open requests should not have closed date   High
   DQ-009   Latitude validity                           High
   DQ-010   Longitude validity                          High
-  DQ-011   Coordinate-pair completeness                High
+  DQ-011   Coordinate pair completeness                High
   DQ-012   Borough standardization                     Medium
   DQ-013   City standardization                        Medium
-  DQ-014   Complaint-type standardization              Medium
-  DQ-015   Blank-string validation                     Medium
+  DQ-014   Complaint type standardization              Medium
+  DQ-015   Blank string validation                     Medium
   DQ-016   Leading/trailing whitespace                 Low
   DQ-017   Complaint type mandatory                    High
   DQ-018   Agency mandatory                            High
-  DQ-019   ZIP-code format validation                  Medium
+  DQ-019   ZIP code format validation                  Medium
   DQ-020   Geographic consistency                      High
-
-### Rulebook design correction
-
-The project artifacts define **20 rules**, including DQ-020 Geographic
-Consistency. The supplied Rule Validation Report displays validation
-results through **DQ-019**.
-
-Therefore, this README does **not** claim that DQ-020 was successfully
-executed in the supplied validation output.
-
-For portfolio presentation, DQ-020 should either be:
-
-1.  added to the final validation report with its actual result, or
-2.  explicitly labelled as a defined rule pending implementation.
-
-This distinction is intentional: the README should not overstate the
-evidence.
-
-------------------------------------------------------------------------
+```
+---
 
 # 9. Data Cleaning & Remediation
 
@@ -431,10 +377,7 @@ The Silver layer contains the primary remediation workflow.
 
 ## 9.1 Duplicate Removal
 
-Duplicate detection excludes `unique_key` from the business-attribute
-comparison.
-
-Where duplicate records existed, the most recent record was retained.
+Duplicate detection excludes `unique_key` from the business attribute comparison. Where duplicate records existed, the most recent record was retained.
 
 ### Result
 
@@ -460,22 +403,20 @@ created_date <= due_date
 
 ### Future dates
 
-Future-dated records were identified against the project's reference
-date.
+Future dated records were identified against the project's reference date.
 
 ### Results
-
+```text
   Validation                       Before   After
   ------------------------------ -------- -------
-  `created_date > closed_date`      1,097       0
-  Future-date violations              706       0
-
+  created_date > closed_date        1,097       0
+  Future date violations              706       0
+```
 ------------------------------------------------------------------------
 
 # 11. Status Reconciliation
 
-The dataset contained inconsistencies between workflow status and
-closure timestamps.
+The dataset contained inconsistencies between workflow status and closure timestamps.
 
 ### Reconciliation rule
 
@@ -509,20 +450,13 @@ These records were removed from the analytical layer.
 
 ### Impact
 
-**6,039 closed-status violations were removed.**
-
-### Combined status inconsistency result
-
-**26,711 status inconsistencies**
-
-→ **0 remaining validation failures**
+**6,039 closed status violations were removed.**
 
 ------------------------------------------------------------------------
 
 # 12. Geographic Data Validation
 
-Geographic quality was treated as more than simply checking whether
-coordinates were populated.
+Geographic quality was treated as more than simply checking whether coordinates were populated.
 
 ### Latitude
 
@@ -536,7 +470,7 @@ coordinates were populated.
 -180 <= longitude <= 180
 ```
 
-### Coordinate-pair completeness
+### Coordinate pair completeness
 
 Latitude and longitude should either:
 
@@ -552,26 +486,24 @@ both be populated
 
 The raw data contained:
 
--   **823 latitude-only records**
--   **217 longitude-only records**
+-   **823 latitude only records**
+-   **217 longitude only records**
 
 for a total of:
 
-**1,040 coordinate-pair violations.**
+**1,040 coordinate pair violations.**
 
 After remediation:
 
-**0 coordinate-pair violations remained.**
+**0 coordinate pair violations remained.**
 
 ------------------------------------------------------------------------
 
 # 13. Categorical Standardization
 
-Reference mapping tables were used to standardize categorical
-attributes.
+Reference mapping tables were used to standardize categorical attributes.
 
-This prevents analytical fragmentation caused by variations in
-capitalization, spelling, punctuation, or naming.
+This prevents analytical fragmentation caused by variations in capitalization, spelling, punctuation or naming.
 
 ------------------------------------------------------------------------
 
@@ -583,8 +515,6 @@ Examples:
 MANHATTAN      → Manhattan
 QUEENS         → Queens
 BRONX          → Bronx
-BROOKLYN       → Brooklyn
-STATEN ISLAND  → Staten Island
 ```
 
 The final standardized borough set contains six approved values.
@@ -620,10 +550,9 @@ table.
 
 ------------------------------------------------------------------------
 
-## Complaint-Type Standardization
+## Complaint Type Standardization
 
-Complaint categories were standardized while preserving business
-meaning.
+Complaint categories were standardized while preserving business meaning.
 
 Examples:
 
@@ -631,11 +560,9 @@ Examples:
 HEAT/HOT WATER        → Heat/Hot Water
 PLUMBING, Plumbing    → Plumbing
 SAFETY, Safety        → Safety
-PAINT/PLASTER         → Paint/Plaster
-DOOR/WINDOW           → Door/Window
 ```
 
-Distinct complaint-type values were reduced:
+Distinct complaint type values were reduced:
 
 **194 → 189**
 
@@ -643,17 +570,17 @@ Distinct complaint-type values were reduced:
 
 # 14. ZIP Code Validation
 
-Non-NULL ZIP codes were required to contain five numeric digits.
+Non NULL ZIP codes were required to contain five numeric digits.
 
-Invalid non-NULL ZIP values were removed.
+Invalid non NULL ZIP values were removed.
 
 ### Result
 
-**5 invalid ZIP-code records removed**
+**5 invalid ZIP code records removed**
 
 and:
 
-**0 invalid non-NULL ZIP-code failures remained after validation.**
+**0 invalid non NULL ZIP code failures remained after validation.**
 
 NULL ZIP values were preserved rather than automatically imputed.
 
@@ -661,13 +588,12 @@ NULL ZIP values were preserved rather than automatically imputed.
 
 # 15. Data Type Enforcement
 
-The ingestion layer deliberately used VARCHAR-based storage.
+The ingestion layer deliberately used VARCHAR based storage.
 
-After validation and cleaning, fields were converted into analytical
-datatypes.
+After validation and cleaning, fields were converted into analytical datatypes.
 
 ### Production datatype examples
-
+```text
   Column           Production Type
   ---------------- -----------------
   unique_key       INT
@@ -681,24 +607,22 @@ datatypes.
   borough          VARCHAR(14)
   latitude         DECIMAL(15,11)
   longitude        DECIMAL(15,11)
-
+```
 ------------------------------------------------------------------------
 
-# 16. Due-Date Column Rationalization
+# 16. Due Date Column Rationalization
 
-The raw dataset contained a `due_date` column, but:
+The raw dataset contained a `due_date` column but:
 
 **5,293,055 of 5,314,955 records were NULL.**
 
-Because the field had extremely limited population and limited
-analytical value, it was removed from the production analytical layer.
+Because the field had extremely limited population and limited analytical value, it was removed from the production analytical layer.
 
 This reduced the final schema from:
 
 **12 → 11 columns**
 
-This is an example of schema rationalization based on data-quality
-evidence rather than blindly preserving every source column.
+This is an example of schema rationalization based on data quality evidence rather than blindly preserving every source column.
 
 ------------------------------------------------------------------------
 
@@ -711,12 +635,13 @@ A central design principle of the project was:
 Records affected by remediation were logged in an exception table.
 
 The exception record contains information such as:
-
+```text
   Field          Purpose
   -------------- ---------------------------------------
   `unique_key`   Identifies the affected record
   `exception`    Reason for remediation
   `time_stamp`   Records when the exception was logged
+```
 
 Examples include:
 
@@ -725,9 +650,6 @@ duplicate
 created_date > closed_date
 created_date > due_date
 closed_date > 2026-06-03
-Update status to Closed
-Invalid Non NULL zip code
-drop due_date
 ```
 
 This provides traceability between the raw Bronze layer and records
@@ -745,52 +667,25 @@ Bronze
 
 # 18. Cleaning Impact Analysis
 
-  Cleaning Action                        Records Affected
-  ------------------------------------ ------------------
-  Duplicate removal                               100,984
-  Invalid date sequence removal                     1,097
-  Future-date removal                                 706
-  Status corrections                               20,672
-  Closed-status violations removed                  6,039
-  Coordinate-pair violations removed                1,040
-  Invalid ZIP codes removed                             5
-  Data-type conversion                     Entire dataset
-  City standardization                   240 → 159 values
-  Complaint-type standardization         194 → 189 values
+<img width="1302" height="728" alt="image" src="https://github.com/user-attachments/assets/a222aa65-8c40-4c18-aa62-3b11cc3eb46a" />
+
+---
 
 ### Important interpretation
 
-These figures represent **records affected by individual remediation
-activities**.
+These figures represent **records affected by individual remediation activities**.
 
-They should **not** be mechanically summed because the same record can
-potentially be affected by multiple rules during the workflow.
+They should **not** be mechanically summed because the same record can potentially be affected by multiple rules during the workflow. The authoritative net result is:
 
-The authoritative net result is:
-
-**108,171 records removed / quarantined**
-
-from the raw population of 5,314,955, leaving:
+**108,171 records removed / quarantined** from the raw population of 5,314,955, leaving:
 
 **5,206,784 clean analytical records.**
-
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-02_Cleaning_Impact_Analysis(1).pdf
-
-Suggested repository image:
-docs/images/cleaning_impact_analysis.png
-
-Insert here:
-![Cleaning Impact Analysis](docs/images/cleaning_impact_analysis.png)
--->
-```
 
 ------------------------------------------------------------------------
 
 # 19. Before vs After
 
+```text
   Metric                          Raw       Clean
   ----------------------- ----------- -----------
   Records                   5,314,955   5,206,784
@@ -798,24 +693,19 @@ Insert here:
   Duplicate rows              100,984           0
   City values                     240         159
   Complaint-type values           194         189
+```
 
 ------------------------------------------------------------------------
 
 # 20. Data Quality Scorecard
 
-  Dimension        Raw Dataset   Clean Dataset
-  -------------- ------------- ---------------
-  Completeness          98.86%          98.88%
-  Uniqueness            98.10%     **100.00%**
-  Validity              99.83%     **100.00%**
-  Timeliness            99.99%     **100.00%**
+<img width="1423" height="446" alt="image" src="https://github.com/user-attachments/assets/8df59ce2-b6e3-4316-8c9c-a26401dc8a79" />
 
 ### Interpretation
 
 **Completeness**
 
-Remained essentially stable because missing values were preserved rather
-than blindly imputed.
+Remained essentially stable because missing values were preserved rather than blindly imputed.
 
 **Uniqueness**
 
@@ -823,65 +713,31 @@ Improved from **98.10% → 100.00%** through duplicate elimination.
 
 **Validity**
 
-Improved from **99.83% → 100.00%** through rule-based remediation.
+Improved from **99.83% → 100.00%** through rule based remediation.
 
 **Timeliness**
 
-Improved from **99.99% → 100.00%** through future-date validation.
-
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-05_Data_Quality_Scorecard(1).pdf
-
-Suggested repository image:
-docs/images/data_quality_scorecard.png
-
-Insert here:
-![Data Quality Scorecard](docs/images/data_quality_scorecard.png)
--->
-```
+Improved from **99.99% → 100.00%** through future date validation.
 
 ------------------------------------------------------------------------
 
-# 21. Post-Clean Rule Validation
+# 21. Post Clean Rule Validation
 
-Cleaning was not considered complete simply because transformation
-queries executed successfully.
+Cleaning was not considered complete simply because transformation queries executed successfully.
 
-The rules were re-executed against the cleaned dataset.
+The rules were reexecuted against the cleaned dataset.
 
 ### Key validation results
 
-  Rule Area                           Before   After
-  ----------------------- ------------------ -------
-  Duplicate validation      100,984 failures   **0**
-  Invalid date sequence       1,097 failures   **0**
-  Status consistency         26,711 failures   **0**
-  Coordinate integrity        1,040 failures   **0**
-  ZIP validation                  5 failures   **0**
+<img width="958" height="664" alt="image" src="https://github.com/user-attachments/assets/f664dce5-51ad-4a07-bb3e-dd3582f92440" />
 
-The supplied validation report therefore demonstrates successful
-post-clean validation for the implemented rules shown in that report.
-
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-01_Rule_Validation_Report(1).pdf
-
-Suggested repository image:
-docs/images/rule_validation_report.png
-
-Insert here:
-![Rule Validation Report](docs/images/rule_validation_report.png)
--->
-```
+The supplied validation report therefore demonstrates successful post clean validation for the implemented rules shown in that report.
 
 ------------------------------------------------------------------------
 
 # 22. Raw vs Cleaned Profiling
 
-The project deliberately retains both profiling stages.
+The project retains both profiling stages.
 
 ### Raw profiling
 
@@ -934,7 +790,7 @@ Insert here:
 
 # 23. SQL Engineering Techniques Demonstrated
 
-### Database & Architecture
+### Database and Architecture
 
 ``` sql
 CREATE DATABASE
@@ -1016,8 +872,7 @@ VARCHAR
 
 # 24. SQL Pipeline
 
-The SQL scripts are organized sequentially so the repository can be
-understood as a complete workflow.
+The SQL scripts are organized sequentially so the repository can be understood as a complete workflow.
 
 ``` text
 01  Create Project Database
@@ -1041,58 +896,59 @@ understood as a complete workflow.
 
 ### Script Map
 
+```text
   ----------------------------------------------------------------------------------------------------------
-  \#                      Exact File Name                                            Purpose
+  Sl No.                  Exact File Name                                            Purpose
   ----------------------- ---------------------------------------------------------- -----------------------
-  01                      `01_Create_Project_Database(1).sql`                        Creates project
+  01                      01_Create_Project_Database.sql                             Creates project
                                                                                      database
 
-  02                      `02_Create_Medallion_Architecture_schema(1).sql`           Creates Bronze, Silver
+  02                      02_Create_Medallion_Architecture_schema.sql                Creates Bronze, Silver
                                                                                      and Gold schemas
 
-  03                      `03_Create_Bronze_Layer_Raw_Data_Table(1).sql`             Creates and loads raw
+  03                      03_Create_Bronze_Layer_Raw_Data_Table.sql                  Creates and loads raw
                                                                                      table
 
-  04                      `04_Raw_Data_Profiling(1).sql`                             Profiles raw dataset
+  04                      04_Raw_Data_Profiling.sql                                  Profiles raw dataset
 
-  05                      `05_Create_Silver_Layer_Data_Table(1).sql`                 Creates Silver layer
+  05                      05_Create_Silver_Layer_Data_Table.sql                      Creates Silver layer
                                                                                      and exception table
 
-  06                      `06_Clean_Silver_Layer_Data(2).sql`                        Executes remediation
+  06                      06_Clean_Silver_Layer_Data.sql                             Executes remediation
 
-  07                      `07_Create_Gold_Layer_Production_Table(1).sql`             Creates production
+  07                      07_Create_Gold_Layer_Production_Table.sql                  Creates production
                                                                                      analytical table
 
-  08                      `08_Load_Cleaned_Silver_Layer_Data_to_Gold_Layer(1).sql`   Loads validated data
+  08                      08_Load_Cleaned_Silver_Layer_Data_to_Gold_Layer.sql        Loads validated data
                                                                                      into Gold
 
-  09                      `09_Cleaned_Data_Profiling(1).sql`                         Profiles the final
+  09                      09_Cleaned_Data_Profiling.sql                              Profiles the final
                                                                                      dataset
   ----------------------------------------------------------------------------------------------------------
+```
 
 ------------------------------------------------------------------------
 
 # 25. Responsible AI Augmentation
 
-AI was used as a **technical productivity tool**, not as an autonomous
-data-quality decision-maker.
+AI was used as a **technical productivity tool**, not as an autonomous data quality decision maker.
 
-### AI-assisted activities
+### AI assisted activities
 
 -   Project planning
 -   Workflow design
 -   Bronze/Silver/Gold architecture design
 -   SQL script generation
--   Bulk-insert troubleshooting
+-   Bulk insert troubleshooting
 -   Profiling workflow generation
--   NULL-analysis query generation
+-   NULL analysis query generation
 -   Standardization mapping assistance
 -   Rulebook drafting
 -   Validation framework development
--   Cleaning-impact analysis
+-   Cleaning impact analysis
 -   Documentation
 
-### Human-controlled activities
+### Human controlled activities
 
 The analyst retained ownership of:
 
@@ -1103,7 +959,7 @@ The analyst retained ownership of:
 -   Cleaning decisions
 -   Exception handling
 -   Validation
--   Data-quality scoring
+-   Data quality scoring
 -   Final conclusions
 
 No raw operational records were submitted for automated AI analysis.
@@ -1124,8 +980,7 @@ Validation
 Approved Output
 ```
 
-The objective was to use AI to reduce development effort without
-delegating data-quality judgment to the model.
+The objective was to use AI to make development efforts more efficient without delegating data quality judgment to the model.
 
 ```{=html}
 <!-- IMAGE PLACEHOLDER
@@ -1144,51 +999,7 @@ Insert here:
 
 # 26. Data Dictionary
 
-The production data dictionary defines the transition from
-ingestion-oriented types to analytical types.
-
-  ------------------------------------------------------------------------
-  Column             Raw Type          Cleaned Type      Description
-  ------------------ ----------------- ----------------- -----------------
-  `unique_key`       VARCHAR(30)       INT               Unique identifier
-                                                         for each service
-                                                         request
-
-  `created_date`     VARCHAR(30)       DATETIME          Date service
-                                                         request is
-                                                         created
-
-  `closed_date`      VARCHAR(30)       DATETIME          Date service
-                                                         request is closed
-
-  `agency`           VARCHAR(30)       VARCHAR(10)       Service-request
-                                                         corresponding
-                                                         agency
-
-  `complaint_type`   VARCHAR(100)      VARCHAR(40)       Type of incident
-
-  `incident_zip`     VARCHAR(10)       INT               ZIP code of
-                                                         incident
-
-  `city`             VARCHAR(30)       VARCHAR(30)       City of incident
-
-  `status`           VARCHAR(30)       VARCHAR(12)       Current status of
-                                                         service request
-
-  `due_date`         VARCHAR(30)       DATETIME          Resolution due
-                                                         date in source
-                                                         layer
-
-  `borough`          VARCHAR(30)       VARCHAR(14)       Borough where
-                                                         incident happened
-
-  `latitude`         VARCHAR(30)       DECIMAL(15,11)    Latitude
-
-  `longitude`        VARCHAR(30)       DECIMAL(15,11)    Longitude
-  ------------------------------------------------------------------------
-
-`due_date` is subsequently excluded from the production analytical layer
-because of insufficient population and limited analytical value.
+The production data dictionary defines the transition from ingestion oriented types to analytical types.
 
 ```{=html}
 <!-- IMAGE PLACEHOLDER
@@ -1203,6 +1014,8 @@ Insert here:
 -->
 ```
 
+`due_date` is subsequently excluded from the production analytical layer because of insufficient population and limited analytical value.
+
 ------------------------------------------------------------------------
 
 # 27. Standardization Mapping Tables
@@ -1212,7 +1025,7 @@ standardization logic inside large SQL expressions.
 
 ### City mapping
 
-**Source artifact:** `01_Mapping_Table_Column_city(1).pdf`
+**Source artifact:** `04_Mapping_Table\01_Mapping_Table_Column_city.pdf`
 
 The mapping consolidates variations such as:
 
@@ -1228,7 +1041,7 @@ ny
 
 ### Borough mapping
 
-**Source artifact:** `02_Mapping_Table_Column_borough(1).pdf`
+**Source artifact:** `04_Mapping_Table\02_Mapping_Table_Column_borough.pdf`
 
 The approved standardized values are:
 
@@ -1240,12 +1053,11 @@ Queens
 Staten Island
 ```
 
-plus the sixth standardized borough value represented in the source
-mapping.
+plus the sixth standardized borough value represented in the source mapping.
 
 ### Complaint-type mapping
 
-**Source artifact:** `03_Mapping_Table_Column_complaint_type(1).pdf`
+**Source artifact:** `04_Mapping_Table\03_Mapping_Table_Column_complaint_type.pdf`
 
 Examples include:
 
@@ -1259,44 +1071,6 @@ PLUMBING, Plumbing
 SAFETY, Safety
 → Safety
 ```
-
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-01_Mapping_Table_Column_city(1).pdf
-
-Suggested repository image:
-docs/images/city_mapping.png
-
-Insert here:
-![City Standardization Mapping](docs/images/city_mapping.png)
--->
-```
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-02_Mapping_Table_Column_borough(1).pdf
-
-Suggested repository image:
-docs/images/borough_mapping.png
-
-Insert here:
-![Borough Standardization Mapping](docs/images/borough_mapping.png)
--->
-```
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-03_Mapping_Table_Column_complaint_type(1).pdf
-
-Suggested repository image:
-docs/images/complaint_type_mapping.png
-
-Insert here:
-![Complaint Type Standardization Mapping](docs/images/complaint_type_mapping.png)
--->
-```
-
 ------------------------------------------------------------------------
 
 # 28. Cleaning Methodology
@@ -1331,12 +1105,10 @@ Duplicate Revalidation
        ↓
 Schema Rationalization
        ↓
-Post-Transformation Validation
+Post Transformation Validation
 ```
 
-The workflow intentionally performs validation again after
-transformation rather than treating successful SQL execution as proof of
-data quality.
+The workflow intentionally performs validation again after transformation rather than treating successful SQL execution as proof of data quality.
 
 ```{=html}
 <!-- IMAGE PLACEHOLDER
@@ -1359,18 +1131,13 @@ Insert here:
 
 Cleaning decisions should come from evidence.
 
-Profiling identifies where the dataset actually fails before
-transformation logic is written.
+Profiling identifies where the dataset actually fails before transformation logic is written.
 
 ------------------------------------------------------------------------
 
 ## 2. Convert Quality Expectations into Explicit Rules
 
-A Data Quality Rulebook turns:
-
-> "The data should be clean."
-
-into testable conditions such as:
+A Data Quality Rulebook turns "**The data should be clean**" into testable conditions such as:
 
 ``` text
 closed_date >= created_date
@@ -1388,57 +1155,41 @@ This makes quality measurable and repeatable.
 
 ## 3. Separate Remediation from Validation
 
-A successful `UPDATE` or `DELETE` does not prove that the data is
-correct.
-
-The rule must be executed again after remediation.
+A successful `UPDATE` or `DELETE` does not prove that the data is correct. The rule must be executed again after remediation.
 
 ------------------------------------------------------------------------
 
 ## 4. Preserve an Audit Trail
 
-Removing a record without recording why it was removed creates a
-governance problem.
-
-The exception table provides a traceability mechanism.
+Removing a record without recording why it was removed creates a governance problem. The exception table provides a traceability mechanism.
 
 ------------------------------------------------------------------------
 
 ## 5. Standardization Requires Reference Logic
 
-Generic functions such as `UPPER()` and `LOWER()` do not necessarily
-resolve business-level variations.
+Generic functions such as `UPPER()` and `LOWER()` do not necessarily resolve business level variations.
 
-Reference mappings are required where different source values represent
-the same analytical category.
+Reference mappings are required where different source values represent the same analytical category.
 
 ------------------------------------------------------------------------
 
 ## 6. Missing Does Not Automatically Mean Wrong
 
-The objective is not:
+The objective is not: "**Make every cell non NULL**"
 
-> "Make every cell non-NULL."
-
-The objective is:
-
-> "Make every value fit its defined business and analytical rules."
+The objective is: "**Make every value fit its defined business and analytical rules**"
 
 ------------------------------------------------------------------------
 
 ## 7. Schema Design Should Reflect Analytical Use
 
-The production schema does not blindly mirror the source schema.
-
-The `due_date` field was removed from the analytical layer because of
-its extremely limited population and limited analytical value.
+The production schema does not mirror the source schema. The `due_date` field was removed from the analytical layer because of its extremely limited population and limited analytical value.
 
 ------------------------------------------------------------------------
 
 # 30. Final Project Outcome
 
-The project transformed a large operational dataset into a structured
-analytical layer through:
+The project transformed a large operational dataset into a structured analytical layer through:
 
 ``` text
 Profiling
@@ -1460,22 +1211,22 @@ Quality Scoring
 
 ### Final state
 
--   **5.3M+ raw service-request records assessed**
+-   **5.3M+ raw service request records assessed**
 -   **5,206,784 records retained in the analytical layer**
 -   **108,171 records removed / quarantined**
 -   **100,984 duplicate records identified and removed**
 -   **26,711 status inconsistencies addressed**
 -   **1,097 invalid date sequences removed**
--   **706 future-date records removed**
--   **1,040 coordinate-pair violations resolved**
+-   **706 future date records removed**
+-   **1,040 coordinate pair violations resolved**
 -   **5 invalid ZIP codes removed**
 -   **City values reduced from 240 → 159**
--   **Complaint-type values reduced from 194 → 189**
+-   **Complaint type values reduced from 194 → 189**
 -   **0 duplicate failures after cleaning**
--   **0 date-sequence failures after cleaning**
--   **0 status-consistency failures after cleaning**
--   **0 coordinate-integrity failures after cleaning**
--   **0 invalid ZIP-code failures after cleaning**
+-   **0 date sequence failures after cleaning**
+-   **0 status consistency failures after cleaning**
+-   **0 coordinate integrity failures after cleaning**
+-   **0 invalid ZIP code failures after cleaning**
 -   **100% uniqueness**
 -   **100% validity**
 -   **100% timeliness**
@@ -1483,10 +1234,6 @@ Quality Scoring
 ------------------------------------------------------------------------
 
 # 31. Portfolio Evidence
-
-The following visual evidence should be surfaced directly on the
-repository landing page so an interviewer does not need to navigate
-through the repository to understand the project.
 
 ## 31.1 Data Quality Scorecard
 
@@ -1568,97 +1315,41 @@ responsible_ai.png
 
 ------------------------------------------------------------------------
 
-# 32. Repository Structure
-
-Use the following structure so the landing page remains self-contained
-while the underlying repository remains organized:
-
-``` text
-NYC-311-Data-Quality-Engineering/
-│
-├── README.md
-│
-├── sql/
-│   ├── 01_Create_Project_Database(1).sql
-│   ├── 02_Create_Medallion_Architecture_schema(1).sql
-│   ├── 03_Create_Bronze_Layer_Raw_Data_Table(1).sql
-│   ├── 04_Raw_Data_Profiling(1).sql
-│   ├── 05_Create_Silver_Layer_Data_Table(1).sql
-│   ├── 06_Clean_Silver_Layer_Data(2).sql
-│   ├── 07_Create_Gold_Layer_Production_Table(1).sql
-│   ├── 08_Load_Cleaned_Silver_Layer_Data_to_Gold_Layer(1).sql
-│   └── 09_Cleaned_Data_Profiling(1).sql
-│
-├── documentation/
-│   ├── 01_Data_Profile_Raw(1).pdf
-│   ├── 02_Data_Profile_Cleaned(1).pdf
-│   ├── 01_Data_Quality_Rulebook(2).pdf
-│   ├── 02_Data_Dictionary(1).pdf
-│   ├── 01_Mapping_Table_Column_city(1).pdf
-│   ├── 02_Mapping_Table_Column_borough(1).pdf
-│   ├── 03_Mapping_Table_Column_complaint_type(1).pdf
-│   ├── 01_Rule_Validation_Report(1).pdf
-│   ├── 02_Cleaning_Impact_Analysis(1).pdf
-│   ├── 03_AI_Augmentation_Report(1).pdf
-│   ├── 04_Cleaning_Methodology_Report(1).pdf
-│   ├── 05_Data_Quality_Scorecard(1).pdf
-│   └── 06_Executive_Summary_and_Report(1).pdf
-│
-├── docs/
-│   └── images/
-│       ├── architecture.png
-│       ├── raw_data_profile.png
-│       ├── cleaned_data_profile.png
-│       ├── cleaning_impact_analysis.png
-│       ├── rule_validation_report.png
-│       ├── data_quality_scorecard.png
-│       ├── cleaning_methodology.png
-│       ├── responsible_ai.png
-│       ├── data_dictionary.png
-│       ├── city_mapping.png
-│       ├── borough_mapping.png
-│       └── complaint_type_mapping.png
-│
-└── data/
-    └── README.md
-```
-
-------------------------------------------------------------------------
-
 # 33. Documentation Inventory
 
-The complete supporting documentation consists of the following exact
-files:
+The complete supporting documentation consists of the following exact files:
 
-  -------------------------------------------------------------------------------------
-  Artifact                            Exact Filename
-  ----------------------------------- -------------------------------------------------
-  Raw Data Profile                    `01_Data_Profile_Raw(1).pdf`
+```text
+  --------------------------------------------------------------------------------------------------
+  Artifact                            Directory
+  ----------------------------------- --------------------------------------------------------------
+  Raw Data Profile                    02_Data_Profile\01_Data_Profile_Raw.pdf
 
-  Cleaned Data Profile                `02_Data_Profile_Cleaned(1).pdf`
+  Cleaned Data Profile                02_Data_Profile\02_Data_Profile_Cleaned.pdf
 
-  Data Quality Rulebook               `01_Data_Quality_Rulebook(2).pdf`
+  Data Quality Rulebook               03_Rule_Book\01_Data_Quality_Rulebook.pdf
 
-  Data Dictionary                     `02_Data_Dictionary(1).pdf`
+  Data Dictionary                     03_Rule_Book\02_Data_Dictionary.pdf
 
-  City Mapping                        `01_Mapping_Table_Column_city(1).pdf`
+  City Mapping                        04_Mapping_Table\01_Mapping_Table_Column_city.pdf
 
-  Borough Mapping                     `02_Mapping_Table_Column_borough(1).pdf`
+  Borough Mapping                     04_Mapping_Table\02_Mapping_Table_Column_borough.pdf
 
-  Complaint Type Mapping              `03_Mapping_Table_Column_complaint_type(1).pdf`
+  Complaint Type Mapping              04_Mapping_Table\03_Mapping_Table_Column_complaint_type.pdf
 
-  Rule Validation Report              `01_Rule_Validation_Report(1).pdf`
+  Rule Validation Report              06_Data_Quality_Reports\01_Rule_Validation_Report.pdf
 
-  Cleaning Impact Analysis            `02_Cleaning_Impact_Analysis(1).pdf`
+  Cleaning Impact Analysis            06_Data_Quality_Reports\02_Cleaning_Impact_Analysis.pdf
 
-  AI Augmentation Report              `03_AI_Augmentation_Report(1).pdf`
+  AI Augmentation Report              06_Data_Quality_Reports\03_AI_Augmentation_Report.pdf
 
-  Cleaning Methodology Report         `04_Cleaning_Methodology_Report(1).pdf`
+  Cleaning Methodology Report         06_Data_Quality_Reports\04_Cleaning_Methodology_Report.pdf
 
-  Data Quality Scorecard              `05_Data_Quality_Scorecard(1).pdf`
+  Data Quality Scorecard              06_Data_Quality_Reports\05_Data_Quality_Scorecard.pdf
 
-  Executive Summary & Report          `06_Executive_Summary_and_Report(1).pdf`
-  -------------------------------------------------------------------------------------
+  Executive Summary & Report          06_Data_Quality_Reports\06_Executive_Summary_and_Report.pdf
+  --------------------------------------------------------------------------------------------------
+```
 
 ------------------------------------------------------------------------
 
@@ -1713,20 +1404,18 @@ The current implementation is a manually executed SQL workflow.
 
 A production enterprise implementation could extend it with:
 
--   Automated rule-execution pipelines
--   Scheduled data-quality monitoring
--   Data observability metrics
--   Automated exception reporting
--   Geographic reference-data validation
--   Incremental quality monitoring
--   Historical quality trend tracking
--   CI/CD validation of SQL transformations
--   Enterprise data-governance integration
--   Automated alerts when quality thresholds are breached
+1.   Automated rule execution pipelines
+2.   Scheduled data quality monitoring
+3.   Data observability metrics
+4.   Automated exception reporting
+5.   Geographic reference data validation
+6.   Incremental quality monitoring
+7.   Historical quality trend tracking
+8.   CI/CD validation of SQL transformations
+9.   Enterprise data governance integration
+10.   Automated alerts when quality thresholds are breached
 
-These improvements would evolve the project from a **one-time
-remediation workflow** into a continuously monitored data-quality
-platform.
+These improvements would evolve the project from a one time remediation workflow into a continuously monitored data quality workflow.
 
 ------------------------------------------------------------------------
 
@@ -1739,7 +1428,7 @@ platform.
 -   Views
 -   Conditional logic
 -   Metadata queries
--   Data-type conversion
+-   Data type conversion
 -   Bulk ingestion
 -   DDL and DML
 
@@ -1758,13 +1447,13 @@ platform.
 
 -   Medallion architecture
 -   Bronze / Silver / Gold separation
--   Raw-to-production data flow
+-   Raw to production data flow
 -   Analytical schema design
 -   Production datatype enforcement
 
 ### Data Governance
 
--   Data-quality rules
+-   Data quality rules
 -   Severity classification
 -   Exception logging
 -   Traceability
@@ -1773,23 +1462,17 @@ platform.
 
 ### Responsible AI
 
--   AI-assisted SQL development
--   AI-assisted troubleshooting
--   AI-assisted documentation
+-   AI assisted SQL development
+-   AI assisted troubleshooting
+-   AI assisted documentation
 -   Human validation and accountability
--   No autonomous analytical decision-making
+-   No autonomous analytical decision making
 
 ------------------------------------------------------------------------
 
 # 37. Portfolio Takeaway
 
-This project is not primarily about removing duplicates or fixing
-capitalization.
-
-It demonstrates a broader data-engineering principle:
-
-> **Data quality should be measurable, rule-driven, repeatable,
-> auditable, and validated after remediation.**
+> **Data quality should be measurable, rule driven, repeatable, auditable and validated after remediation.**
 
 The workflow moves from:
 
@@ -1823,35 +1506,6 @@ That makes the methodology applicable beyond NYC 311 to domains such as:
 
 # Technology Stack
 
-`Microsoft SQL Server` · `T-SQL` · `SQL Server Management Studio` ·
-`Data Quality Engineering` · `Data Profiling` · `Medallion Architecture`
-· `Responsible AI`
+`Microsoft SQL Server` · `T-SQL` · `SQL Server Management Studio` · `Data Quality Engineering` · `Data Profiling` · `Medallion Architecture` · `Responsible AI`
 
 ------------------------------------------------------------------------
-
-# Project Status
-
-**Completed --- End-to-End Data Quality Assessment, Remediation &
-Validation**
-
-``` text
-Raw Dataset        ████████████████████
-Profiling          ████████████████████
-Rulebook           ████████████████████
-Remediation        ████████████████████
-Exception Handling ████████████████████
-Validation         ████████████████████
-Quality Scorecard  ████████████████████
-Documentation      ████████████████████
-```
-
-------------------------------------------------------------------------
-
-## Author
-
-**Subhomoy H**
-
-SQL · Data Analytics · Data Quality · Data Engineering
-
-> Building analytical systems where data quality is treated as an
-> engineering discipline, not an afterthought.
