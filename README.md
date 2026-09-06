@@ -8,9 +8,7 @@
 
 ## Executive Summary
 
-Operational datasets are rarely analysis ready when they arrive.
-
-This project demonstrates how a large operational dataset can be transformed into a structured, validated analytical dataset using a **rule driven data quality framework** rather than adhoc cleaning.
+Operational datasets are rarely analysis ready when they arrive. This project demonstrates how a large operational dataset can be transformed into a structured, validated analytical dataset using a **rule driven data quality framework** rather than adhoc cleaning.
 
 Using the **NYC 311 Service Requests** dataset, I designed and implemented an end to end data quality workflow in **Microsoft SQL Server** covering:
 
@@ -41,33 +39,19 @@ The result was a cleaned analytical dataset containing **5,206,784 records acros
 
 ```text
 Project Type:                     Data Quality Engineering / SQL Data Cleaning
-
 Dataset:                          NYC 311 Service Requests
-
 Source:                           NYC Open Data
-
 Raw Records:                      5,314,955
-
 Clean Records:                    5,206,784
-
 Records Removed / Quarantined:    108,171
-
 Raw Columns:                      12
-
 Production Columns:               11
-
 Database:                         Microsoft SQL Server
-
 Architecture:                     Medallion Architecture (Bronze → Silver → Gold)
-
 Primary Language:                 T-SQL
-
 Validation Framework:             Rule based Data Quality Rulebook
-
 Quality Dimensions:               Completeness, Uniqueness, Validity, Timeliness
-
 AI Usage:                         Development assistance with analyst controlled validation
-
 Dataset coverage:                 2025-01-01 to 2026-06-01.
 ```
 
@@ -75,7 +59,7 @@ Dataset coverage:                 2025-01-01 to 2026-06-01.
 
 # 2. Business Problem
 
-NYC 311 is a large operational service request system containing information about citizen complaints, responsible agencies, request status, timestamps, locations, and complaint classifications.
+NYC 311 is a large operational service request system containing information about citizen complaints, responsible agencies, request status, timestamps, locations and complaint classifications.
 
 At this scale, data quality problems can affect:
 
@@ -88,11 +72,11 @@ At this scale, data quality problems can affect:
 7.   Downstream dashboards
 8.   Analytical models
 
-The project therefore treats data quality as a **formal engineering problem** and not as a preprocessing step.
+The project therefore treats data quality as a formal engineering problem and not as a preprocessing step.
 
 ### Core question
 
-> **How can a large operational dataset be systematically assessed, remediated, validated, and made trustworthy for analytical consumption while preserving traceability of the changes made?**
+> **How can a large operational dataset be systematically assessed, remediated, validated and made trustworthy for analytical consumption while preserving traceability of the changes made?**
 
 ------------------------------------------------------------------------
 
@@ -190,7 +174,7 @@ The database follows the **Medallion Architecture**.
              │ EXCEPTION TABLE  │  │ POST CLEAN       │
              │                  │  │ VALIDATION       │
              │ unique_key       │  │                  │
-             │ exception reason │  │ Rule retesting  │
+             │ exception reason │  │ Rule retesting   │
              │ timestamp        │  │ Profiling        │
              └──────────────────┘  └────────┬─────────┘
                                              │
@@ -213,25 +197,17 @@ The database follows the **Medallion Architecture**.
                               └────────────────────────┘
 ```
 
-<img width="1312" height="502" alt="Medallion architecture" src="https://github.com/user-attachments/assets/43801339-3564-4394-9857-d8a883503276" />
+<img src="07_readme_images/medallion_architecture.png" />
 Image Source: dataforgelabs.com
 
 ------------------------------------------------------------------------
 
 # 5. Bronze Layer - Raw Data Ingestion
 
-The Bronze layer preserves the source data in an ingestion oriented structure.
+The Bronze layer preserves the source data in an ingestion oriented structure. All source columns initially enter as `VARCHAR`, allowing the raw ingestion layer to accept the source file before analytical datatype enforcement.
 
-All source columns initially enter as `VARCHAR`, allowing the raw ingestion layer to accept the source file before analytical datatype enforcement.
-
-### Raw table
-
-``` text
-bronze.NYC_Service_Requests_raw
-```
-
+### Bronze Layer - Raw Data schema
 ```text
-### Raw schema
 
   Column           Raw Type
   ---------------- --------------
@@ -268,7 +244,7 @@ AI assisted with troubleshooting issues including row terminators, insufficient 
 
 # 6. Initial Data Profiling
 
-Profiling was performed **before transformation** so remediation decisions were based on observed data quality problems rather than assumptions. The profiling framework assessed:
+Profiling was performed before transformation so remediation decisions were based on observed data quality problems rather than assumptions. The profiling framework assessed:
 
 ### Completeness
 
@@ -325,16 +301,13 @@ The raw dataset contained:
 -   **7 status values**
 -   **16 agency values**
 
-The findings show that the raw dataset contained more than formatting inconsistencies. It contained structural problems involving duplication, temporal integrity, workflow status inconsistency, geographic
-incompleteness, and non standardized reference values.
+The findings show that the raw dataset contained more than formatting inconsistencies. It contained structural problems involving duplicates, temporal integrity, workflow status inconsistency, geographic incompleteness, and non standardized reference values.
 
 ------------------------------------------------------------------------
 
 # 8. Data Quality Rulebook
 
-Instead of writing isolated cleaning queries, the project formalized expected data behavior into a **Data Quality Rulebook**.
-
-Rules were classified as:
+Instead of writing isolated cleaning queries, the project formalized expected data behavior into a **Data Quality Rulebook**. Rules were classified as:
 ```text
 -   Critical        integrity, identification and core business process issues
 -   High            analytical, geographic and operational issues
@@ -373,8 +346,6 @@ Rules were classified as:
 
 The Silver layer contains the primary remediation workflow.
 
-------------------------------------------------------------------------
-
 ## 9.1 Duplicate Removal
 
 Duplicate detection excludes `unique_key` from the business attribute comparison. Where duplicate records existed, the most recent record was retained.
@@ -383,7 +354,7 @@ Duplicate detection excludes `unique_key` from the business attribute comparison
 
 **100,984 duplicate records were removed.**
 
-------------------------------------------------------------------------
+---
 
 # 10. Temporal Validation
 
@@ -489,23 +460,15 @@ The raw data contained:
 -   **823 latitude only records**
 -   **217 longitude only records**
 
-for a total of:
+For a total of: **1,040 coordinate pair violations.**
 
-**1,040 coordinate pair violations.**
-
-After remediation:
-
-**0 coordinate pair violations remained.**
+After remediation: **0 coordinate pair violations remained.**
 
 ------------------------------------------------------------------------
 
 # 13. Categorical Standardization
 
-Reference mapping tables were used to standardize categorical attributes.
-
-This prevents analytical fragmentation caused by variations in capitalization, spelling, punctuation or naming.
-
-------------------------------------------------------------------------
+Reference mapping tables were used to standardize categorical attributes. This prevents analytical fragmentation caused by variations in capitalization, spelling, punctuation or naming.
 
 ## Borough Standardization
 
@@ -519,17 +482,11 @@ BRONX          → Bronx
 
 The final standardized borough set contains six approved values.
 
-------------------------------------------------------------------------
-
 ## City Standardization
 
-The raw dataset contained:
+The raw dataset contained: **240 distinct city values**
 
-**240 distinct city values**
-
-which were standardized to:
-
-**159 values**
+which were standardized to: **159 values**
 
 Examples include:
 
@@ -540,15 +497,12 @@ NY
 Ny
 ny
 
-        ↓
+ ↓
 
 New York City
 ```
 
-Other spelling and casing variations were consolidated using the mapping
-table.
-
-------------------------------------------------------------------------
+Other spelling and casing variations were consolidated using the mapping table.
 
 ## Complaint Type Standardization
 
@@ -562,35 +516,23 @@ PLUMBING, Plumbing    → Plumbing
 SAFETY, Safety        → Safety
 ```
 
-Distinct complaint type values were reduced:
-
-**194 → 189**
+Distinct complaint type values were reduced: **194 → 189**
 
 ------------------------------------------------------------------------
 
 # 14. ZIP Code Validation
 
-Non NULL ZIP codes were required to contain five numeric digits.
-
-Invalid non NULL ZIP values were removed.
+Non NULL ZIP codes were required to contain five numeric digits. Invalid non NULL ZIP values were removed.
 
 ### Result
 
-**5 invalid ZIP code records removed**
-
-and:
-
-**0 invalid non NULL ZIP code failures remained after validation.**
-
-NULL ZIP values were preserved rather than automatically imputed.
+**5 invalid ZIP code records removed** and **0 invalid non NULL ZIP code failures remained after validation.** NULL ZIP values were preserved rather than automatically imputed.
 
 ------------------------------------------------------------------------
 
 # 15. Data Type Enforcement
 
-The ingestion layer deliberately used VARCHAR based storage.
-
-After validation and cleaning, fields were converted into analytical datatypes.
+The ingestion layer deliberately used VARCHAR based storage. After validation and cleaning, fields were converted into analytical datatypes.
 
 ### Production datatype examples
 ```text
@@ -612,17 +554,11 @@ After validation and cleaning, fields were converted into analytical datatypes.
 
 # 16. Due Date Column Rationalization
 
-The raw dataset contained a `due_date` column but:
-
-**5,293,055 of 5,314,955 records were NULL.**
+The raw dataset contained a `due_date` column but: **5,293,055 of 5,314,955 records were NULL.**
 
 Because the field had extremely limited population and limited analytical value, it was removed from the production analytical layer.
 
-This reduced the final schema from:
-
-**12 → 11 columns**
-
-This is an example of schema rationalization based on data quality evidence rather than blindly preserving every source column.
+This reduced the final schema from: **12 → 11 columns**
 
 ------------------------------------------------------------------------
 
@@ -652,8 +588,7 @@ created_date > due_date
 closed_date > 2026-06-03
 ```
 
-This provides traceability between the raw Bronze layer and records
-removed from the analytical layer.
+This provides traceability between the raw Bronze layer and records removed from the analytical layer.
 
 ``` text
 Bronze
@@ -667,19 +602,15 @@ Bronze
 
 # 18. Cleaning Impact Analysis
 
-<img width="1302" height="728" alt="image" src="https://github.com/user-attachments/assets/a222aa65-8c40-4c18-aa62-3b11cc3eb46a" />
+<img src="07_readme_images/cleaning_impact_analysis.png" />
 
 ---
 
 ### Important interpretation
 
-These figures represent **records affected by individual remediation activities**.
+These figures represent **records affected by individual remediation activities**. They should **not** be mechanically summed because the same record can potentially be affected by multiple rules during the workflow. 
 
-They should **not** be mechanically summed because the same record can potentially be affected by multiple rules during the workflow. The authoritative net result is:
-
-**108,171 records removed / quarantined** from the raw population of 5,314,955, leaving:
-
-**5,206,784 clean analytical records.**
+The authoritative net result is: **108,171 records removed / quarantined** from the raw population of 5,314,955, leaving **5,206,784 clean analytical records.**
 
 ------------------------------------------------------------------------
 
@@ -699,7 +630,7 @@ They should **not** be mechanically summed because the same record can potential
 
 # 20. Data Quality Scorecard
 
-<img width="1423" height="446" alt="image" src="https://github.com/user-attachments/assets/8df59ce2-b6e3-4316-8c9c-a26401dc8a79" />
+<img src="07_readme_images/data_quality_scorecard.png" />
 
 ### Interpretation
 
@@ -723,13 +654,11 @@ Improved from **99.99% → 100.00%** through future date validation.
 
 # 21. Post Clean Rule Validation
 
-Cleaning was not considered complete simply because transformation queries executed successfully.
-
-The rules were reexecuted against the cleaned dataset.
+Cleaning was not considered complete simply because transformation queries executed successfully. The rules were reexecuted against the cleaned dataset.
 
 ### Key validation results
 
-<img width="958" height="664" alt="image" src="https://github.com/user-attachments/assets/f664dce5-51ad-4a07-bb3e-dd3582f92440" />
+<img src="07_readme_images/rule_validation_report.png" />
 
 The supplied validation report therefore demonstrates successful post clean validation for the implemented rules shown in that report.
 
@@ -760,31 +689,6 @@ The cleaned dataset contains:
 -   159 city values
 -   189 complaint-type values
 -   0 failures for the implemented post-clean validation checks
-
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-01_Data_Profile_Raw(1).pdf
-
-Suggested repository image:
-docs/images/raw_data_profile.png
-
-Insert here:
-![Raw Data Profile](docs/images/raw_data_profile.png)
--->
-```
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-02_Data_Profile_Cleaned(1).pdf
-
-Suggested repository image:
-docs/images/cleaned_data_profile.png
-
-Insert here:
-![Cleaned Data Profile](docs/images/cleaned_data_profile.png)
--->
-```
 
 ------------------------------------------------------------------------
 
@@ -897,41 +801,41 @@ The SQL scripts are organized sequentially so the repository can be understood a
 ### Script Map
 
 ```text
-  ----------------------------------------------------------------------------------------------------------
-  Sl No.                  Exact File Name                                            Purpose
-  ----------------------- ---------------------------------------------------------- -----------------------
-  01                      01_Create_Project_Database.sql                             Creates project
-                                                                                     database
+  -------------------------------------------------------------------------------------------
+  Sl No.   Exact File Name                                            Purpose
+  -------- ---------------------------------------------------------- -----------------------
+  01       01_Create_Project_Database.sql                             Creates project
+                                                                      database
 
-  02                      02_Create_Medallion_Architecture_schema.sql                Creates Bronze, Silver
-                                                                                     and Gold schemas
+  02       02_Create_Medallion_Architecture_schema.sql                Creates Bronze, Silver
+                                                                      and Gold schemas
 
-  03                      03_Create_Bronze_Layer_Raw_Data_Table.sql                  Creates and loads raw
-                                                                                     table
+  03       03_Create_Bronze_Layer_Raw_Data_Table.sql                  Creates and loads raw
+                                                                      table
 
-  04                      04_Raw_Data_Profiling.sql                                  Profiles raw dataset
+  04       04_Raw_Data_Profiling.sql                                  Profiles raw dataset
 
-  05                      05_Create_Silver_Layer_Data_Table.sql                      Creates Silver layer
-                                                                                     and exception table
+  05       05_Create_Silver_Layer_Data_Table.sql                      Creates Silver layer
+                                                                      and exception table
 
-  06                      06_Clean_Silver_Layer_Data.sql                             Executes remediation
+  06       06_Clean_Silver_Layer_Data.sql                             Executes remediation
 
-  07                      07_Create_Gold_Layer_Production_Table.sql                  Creates production
-                                                                                     analytical table
+  07       07_Create_Gold_Layer_Production_Table.sql                  Creates production
+                                                                      analytical table
 
-  08                      08_Load_Cleaned_Silver_Layer_Data_to_Gold_Layer.sql        Loads validated data
-                                                                                     into Gold
+  08       08_Load_Cleaned_Silver_Layer_Data_to_Gold_Layer.sql        Loads validated data
+                                                                      into Gold
 
-  09                      09_Cleaned_Data_Profiling.sql                              Profiles the final
-                                                                                     dataset
-  ----------------------------------------------------------------------------------------------------------
+  09       09_Cleaned_Data_Profiling.sql                              Profiles the final
+                                                                      dataset
+  -------------------------------------------------------------------------------------------
 ```
 
 ------------------------------------------------------------------------
 
 # 25. Responsible AI Augmentation
 
-AI was used as a **technical productivity tool**, not as an autonomous data quality decision maker.
+AI was used as a **technical productivity tool**, and not as an autonomous data decision maker.
 
 ### AI assisted activities
 
@@ -982,37 +886,13 @@ Approved Output
 
 The objective was to use AI to make development efforts more efficient without delegating data quality judgment to the model.
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-03_AI_Augmentation_Report(1).pdf
-
-Suggested repository image:
-docs/images/responsible_ai.png
-
-Insert here:
-![Responsible AI Workflow](docs/images/responsible_ai.png)
--->
-```
-
 ------------------------------------------------------------------------
 
 # 26. Data Dictionary
 
 The production data dictionary defines the transition from ingestion oriented types to analytical types.
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-02_Data_Dictionary(1).pdf
-
-Suggested repository image:
-docs/images/data_dictionary.png
-
-Insert here:
-![Data Dictionary](docs/images/data_dictionary.png)
--->
-```
+<img src = "07_readme_images/data_dictionary.png" />
 
 `due_date` is subsequently excluded from the production analytical layer because of insufficient population and limited analytical value.
 
@@ -1020,8 +900,7 @@ Insert here:
 
 # 27. Standardization Mapping Tables
 
-The project uses explicit mapping artifacts rather than hiding
-standardization logic inside large SQL expressions.
+The project uses explicit mapping artifacts rather than hiding standardization logic inside large SQL expressions.
 
 ### City mapping
 
@@ -1075,8 +954,7 @@ SAFETY, Safety
 
 # 28. Cleaning Methodology
 
-The cleaning workflow was derived from the profiling results and the
-Data Quality Rulebook.
+The cleaning workflow was derived from the profiling results and the Data Quality Rulebook.
 
 ### Core remediation sequence
 
@@ -1110,30 +988,13 @@ Post Transformation Validation
 
 The workflow intentionally performs validation again after transformation rather than treating successful SQL execution as proof of data quality.
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Source artifact:
-04_Cleaning_Methodology_Report(1).pdf
-
-Suggested repository image:
-docs/images/cleaning_methodology.png
-
-Insert here:
-![Cleaning Methodology](docs/images/cleaning_methodology.png)
--->
-```
-
 ------------------------------------------------------------------------
 
 # 29. Key Data Engineering Lessons
 
-## 1. Profile Before You Clean
+## 1. Profile Before Cleaning
 
-Cleaning decisions should come from evidence.
-
-Profiling identifies where the dataset actually fails before transformation logic is written.
-
-------------------------------------------------------------------------
+Cleaning decisions should come from evidence. Profiling identifies where the dataset actually fails before transformation logic is written.
 
 ## 2. Convert Quality Expectations into Explicit Rules
 
@@ -1151,19 +1012,13 @@ latitude and longitude must exist together
 
 This makes quality measurable and repeatable.
 
-------------------------------------------------------------------------
-
 ## 3. Separate Remediation from Validation
 
 A successful `UPDATE` or `DELETE` does not prove that the data is correct. The rule must be executed again after remediation.
 
-------------------------------------------------------------------------
-
 ## 4. Preserve an Audit Trail
 
 Removing a record without recording why it was removed creates a governance problem. The exception table provides a traceability mechanism.
-
-------------------------------------------------------------------------
 
 ## 5. Standardization Requires Reference Logic
 
@@ -1171,15 +1026,11 @@ Generic functions such as `UPPER()` and `LOWER()` do not necessarily resolve bus
 
 Reference mappings are required where different source values represent the same analytical category.
 
-------------------------------------------------------------------------
-
 ## 6. Missing Does Not Automatically Mean Wrong
 
 The objective is not: "**Make every cell non NULL**"
 
-The objective is: "**Make every value fit its defined business and analytical rules**"
-
-------------------------------------------------------------------------
+The objective is: "**Make every value fit its defined business and analytical rules**
 
 ## 7. Schema Design Should Reflect Analytical Use
 
@@ -1237,81 +1088,46 @@ Quality Scoring
 
 ## 31.1 Data Quality Scorecard
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Exact source filename:
-05_Data_Quality_Scorecard(1).pdf
+<img src = "07_readme_images/data_quality_scorecard.png" />
 
-Recommended exported image filename:
-data_quality_scorecard.png
--->
-```
 ## 31.2 Cleaning Impact Analysis
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Exact source filename:
-02_Cleaning_Impact_Analysis(1).pdf
+<img src = "07_readme_images/cleaning_impact_analysis.png" />
 
-Recommended exported image filename:
-cleaning_impact_analysis.png
--->
-```
 ## 31.3 Rule Validation Report
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Exact source filename:
-01_Rule_Validation_Report(1).pdf
+<img src = "07_readme_images/rule_validation_report.png" />
 
-Recommended exported image filename:
-rule_validation_report.png
--->
-```
 ## 31.4 Raw Data Profile
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Exact source filename:
-01_Data_Profile_Raw(1).pdf
+<img src = "07_readme_images/data_profile_raw_1.png" />
+<img src = "07_readme_images/data_profile_raw_2.png" />
+<img src = "07_readme_images/data_profile_raw_3.png" />
+<img src = "07_readme_images/data_profile_raw_4.png" />
+<img src = "07_readme_images/data_profile_raw_5.png" />
+<img src = "07_readme_images/data_profile_raw_6.png" />
+<img src = "07_readme_images/data_profile_raw_7.png" />
 
-Recommended exported image filename:
-raw_data_profile.png
--->
-```
 ## 31.5 Cleaned Data Profile
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Exact source filename:
-02_Data_Profile_Cleaned(1).pdf
+<img src = "07_readme_images/data_profile_cleaned_1.png" />
+<img src = "07_readme_images/data_profile_cleaned_2.png" />
+<img src = "07_readme_images/data_profile_cleaned_3.png" />
+<img src = "07_readme_images/data_profile_cleaned_4.png" />
+<img src = "07_readme_images/data_profile_cleaned_5.png" />
+<img src = "07_readme_images/data_profile_cleaned_6.png" />
+<img src = "07_readme_images/data_profile_cleaned_7.png" />
 
-Recommended exported image filename:
-cleaned_data_profile.png
--->
-```
 ## 31.6 Cleaning Methodology
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Exact source filename:
-04_Cleaning_Methodology_Report(1).pdf
+<img src = "07_readme_images/data_cleaning_methodology_1.png" />
+<img src = "07_readme_images/data_cleaning_methodology_2.png" />
+<img src = "07_readme_images/data_cleaning_methodology_3.png" />
 
-Recommended exported image filename:
-cleaning_methodology.png
--->
-```
 ## 31.7 Responsible AI Augmentation
 
-```{=html}
-<!-- IMAGE PLACEHOLDER
-Exact source filename:
-03_AI_Augmentation_Report(1).pdf
-
-Recommended exported image filename:
-responsible_ai.png
--->
-```
+<img src = "07_readme_images/ai_augmentation_1.png" />
+<img src = "07_readme_images/ai_augmentation_2.png" />
 
 ------------------------------------------------------------------------
 
