@@ -342,11 +342,11 @@ Instead of writing isolated cleaning queries, the project formalized expected da
 ```
 ---
 
-# 9. Data Cleaning & Remediation
+# Data Cleaning & Remediation
 
 The Silver layer contains the primary remediation workflow.
 
-## 9.1 Duplicate Removal
+# 9. Duplicate Removal
 
 Duplicate detection excludes `unique_key` from the business attribute comparison. Where duplicate records existed, the most recent record was retained.
 
